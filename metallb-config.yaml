@@ -1,0 +1,17 @@
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: management-pool
+  namespace: metallb-system
+spec:
+  addresses:
+  - 10.99.1.241-10.99.1.250
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: management-l2
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+    - management-pool

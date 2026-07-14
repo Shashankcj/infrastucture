@@ -1,0 +1,34 @@
+apiVersion: cluster.x-k8s.io/v1beta1
+kind: MachineDeployment
+
+metadata:
+  name: workermetadata
+
+  annotations:
+    cluster.x-k8s.io/cluster-api-autoscaler-node-group-min-size: "1"
+    cluster.x-k8s.io/cluster-api-autoscaler-node-group-max-size: "7"
+
+spec:
+  clusterName: my-cluster
+
+  replicas: 4
+
+  selector:
+    matchLabels: {}
+
+  template:
+    spec:
+      clusterName: my-cluster
+
+      version: v1.29.15
+
+      bootstrap:
+        configRef:
+          apiVersion: bootstrap.cluster.x-k8s.io/v1beta1
+          kind: KubeadmConfigTemplate
+          name: worker-bootstrap
+
+      infrastructureRef:
+        apiVersion: infrastructure.cluster.x-k8s.io/v1alpha1
+        kind: ProxmoxMachineTemplate
+        name: worker-template

@@ -1,0 +1,35 @@
+apiVersion: argocd-image-updater.argoproj.io/v1alpha1
+kind: ImageUpdater
+metadata:
+  name: webapp-updater
+  namespace: argocd
+
+spec:
+  applicationRefs:
+    - namePattern: webapp
+      images:
+        - alias: backend
+          imageName: shashankcj/web_app
+          manifestTargets:
+            helm:
+              spec: image.backend
+        - alias: frontend
+          imageName: shashankcj/web_app
+          manifestTargets:
+            helm:
+              spec: image.frontend
+        - alias: celery
+          imageName: shashankcj/web_app
+          manifestTargets:
+            helm:
+              spec: image.celery
+
+  commonUpdateSettings:
+    pullSecret: pullsecret:argocd/regcred
+    updateStrategy: newest-build
+
+  writeBackConfig:
+    method: git
+    gitConfig:
+      repository: https://github.com/Shashankcj/fullstact_project_gitops.git
+      branch: main

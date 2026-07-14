@@ -1,0 +1,22 @@
+apiVersion: infrastructure.cluster.x-k8s.io/v1alpha1
+kind: ProxmoxCluster
+
+metadata:
+  name: my-proxmox-cluster
+
+spec:
+  credentialsRef:
+    name: proxmox-credentials
+  controlPlaneEndpoint:
+    host: 10.99.1.249
+    port: 6443
+
+  dnsServers:
+    - 8.8.8.8
+
+  ipv4Config:
+    addresses:
+      - 10.99.1.195-10.99.1.220
+    prefix: 24
+
+    gateway: 10.99.1.1
