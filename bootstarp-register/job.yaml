@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bootstrap-register
+  namespace: genesis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bootstrap-register
+  template:
+    metadata:
+      labels:
+        app: bootstrap-register
+    spec:
+      serviceAccountName: bootstrap-register-sa
+      containers:
+      - name: bootstrap-register
+        image: shashankcj/ubuntu:bootstrap-register-latest
+        imagePullPolicy: Always
+        env:
+        - name: ARGOCD_SERVER
+          valueFrom:
+            secretKeyRef:
+              name: argocd-credentials
+              key: ARGOCD_SERVER
+        - name: ARGOCD_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: argocd-credentials
+              key: ARGOCD_USERNAME
+        - name: ARGOCD_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: argocd-credentials
+              key: ARGOCD_PASSWORD

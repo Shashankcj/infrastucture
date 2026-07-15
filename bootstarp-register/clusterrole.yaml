@@ -1,0 +1,58 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: bootstrap-register-role
+rules:
+  # Read kubeconfig Secret created by Cluster API
+  - apiGroups: [""]
+    resources:
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+
+  # Read namespaces (optional but useful)
+  - apiGroups: [""]
+    resources:
+      - namespaces
+    verbs:
+      - get
+      - list
+
+  # Allow the Job to create the resources that
+  # "argocd cluster add" needs in the workload cluster
+  - apiGroups: [""]
+    resources:
+      - serviceaccounts
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+
+  # Read Cluster API Cluster objects to check readiness
+  - apiGroups: ["cluster.x-k8s.io"]
+    resources:
+      - clusters
+    verbs:
+      - get
+      - list
+      - watch
+
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources:
+      - clusterroles
+      - clusterrolebindings
+      - roles
+      - rolebindings
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
